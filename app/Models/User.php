@@ -54,8 +54,17 @@ class User extends Authenticatable
         $databaseDirectory = dirname($defaultPath);
         $databaseFilename  = $this->house . '.sqlite';
 
-        $fullPath = $databaseDirectory . '/' . $databaseFilename;
+        $relativePath = $databaseDirectory . '/' . $databaseFilename;
+        $fullPath = base_path($relativePath);
 
-        return $absolutePath ? base_path($fullPath) : $fullPath;
+        if (!file_exists($fullPath)) {
+            if (!is_dir(dirname($fullPath))) {
+                mkdir(dirname($fullPath), 0755, true);
+            }
+
+            touch($fullPath);
+        }
+
+        return $absolutePath ? $fullPath : $relativePath;
     }
 }
