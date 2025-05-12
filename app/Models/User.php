@@ -46,4 +46,17 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function database(bool $path = true, bool $extension = true):  string
+    {
+        $file = $this->house;
+
+        if ($path) {
+            $file = "/Users/reber/Documents/Projetos/Dev Web/Laravel/multi-tenancy-houses/database/{$file}";
+        }
+        if ($extension) {
+            $file .= '.sqlite';
+        }
+        return $file;
+    }
 }
