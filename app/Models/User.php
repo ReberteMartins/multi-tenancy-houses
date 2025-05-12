@@ -47,16 +47,15 @@ class User extends Authenticatable
         ];
     }
 
-    public function database(bool $path = true, bool $extension = true):  string
+    public function database(bool $absolutePath = true): string
     {
-        $file = $this->house;
+        $defaultPath = env('DB_DATABASE', 'database/database.sqlite');
 
-        if ($path) {
-            $file = "/Users/reber/Documents/Projetos/Dev Web/Laravel/multi-tenancy-houses/database/{$file}";
-        }
-        if ($extension) {
-            $file .= '.sqlite';
-        }
-        return $file;
+        $databaseDirectory = dirname($defaultPath);
+        $databaseFilename  = $this->house . '.sqlite';
+
+        $fullPath = $databaseDirectory . '/' . $databaseFilename;
+
+        return $absolutePath ? base_path($fullPath) : $fullPath;
     }
 }
