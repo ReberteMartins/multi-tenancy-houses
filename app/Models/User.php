@@ -57,14 +57,21 @@ class User extends Authenticatable
         $relativePath = $databaseDirectory . '/' . $databaseFilename;
         $fullPath = base_path($relativePath);
 
-        if (!file_exists($fullPath)) {
-            if (!is_dir(dirname($fullPath))) {
-                mkdir(dirname($fullPath), 0755, true);
-            }
-
-            touch($fullPath);
-        }
+        $this->ensureDatabaseExists($fullPath);
 
         return $absolutePath ? $fullPath : $relativePath;
+    }
+
+    protected function ensureDatabaseExists(string $path): void
+    {
+        if (!file_exists($path)) {
+            $directory = dirname($path);
+
+            if (!is_dir($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            touch($path);
+        }
     }
 }
