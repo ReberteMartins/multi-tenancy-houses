@@ -29,9 +29,12 @@ class LeadComponent extends Component
             'rows' => Lead::query()
                 ->when($this->search, function ($query, $search) {
                     $this->search = trim($search);
-                    $query->where('name', 'like', "%{$this->search}%")
-                        ->orWhere('email', 'like', "%{$this->search}%")
-                        ->orWhere('phone', 'like', "%{$this->search}%");
+
+                    return $query->whereAny([
+                        'name',
+                        'email',
+                        'phone',
+                    ], 'like', "%{$this->search}%");
                 })
                 ->paginate($this->quantity)
                 ->withQueryString(),
